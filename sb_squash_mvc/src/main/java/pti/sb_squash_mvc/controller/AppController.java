@@ -36,12 +36,12 @@ public class AppController {
 		
 		StatusDto statusDto = service.logInUser(userName, password);
 		
-		if(statusDto == null) {
+		if(statusDto != null && statusDto.getError() == true) {
 			
 			targetPage = "login.html";
 		}
 		
-		model.addAttribute("statusdto", statusDto);
+		model.addAttribute("statusDto", statusDto);
 		
 		return targetPage;
 

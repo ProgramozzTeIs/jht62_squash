@@ -60,6 +60,13 @@
 	
 	</form>
 	
+	
+	<div th:if="${statusDto != null && statusDto.getError() == true}">
+	
+		<p>Wrong username or password</p>
+	
+	</div>
+	
 
 </body>
 </html>
