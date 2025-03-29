@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+	<style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #F5F5DC;
+            background-size: cover;
+        }
+        form {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            text-align: center;
+        }
+        form p {
+            margin: 0;
+            font-size: 14px;
+            color: #0000CD;
+        }
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #FF0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #004d40;
+        }
+    </style>
+	
+
+</head>
+<body>
+
+	<form action="/" method ="get">
+		<p>Username:</p><input type="text" name="user" placeholder="Enter your username"/>
+		<p>Password: </p><input type="password" name="password" placeholder="Enter your password"/>
+		<input type="submit" value="Login">
+	
+	</form>
+	
+
+</body>
+</html>
