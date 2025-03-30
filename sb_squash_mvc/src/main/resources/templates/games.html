@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Squash matches</title>
+</head>
+<body>
+
+	<h1>Results:</h1>
+		<table>
+			<tr>
+				<th>Date</th>
+				<th>First player</th>
+				<th>Second player</th>
+				<th>Point of first player</th>
+				<th>Point of second player</th>
+				<th>Name of place</th>
+				<th>Address of place</th>
+				<th>Price in HUF</th>
+				<th>Price in EUR</th>
+			</tr>
+			<tr th:each="gameDto : ${gameDto.getMatches()}">
+				<td th:text="${gameDto.get()}"></td>
+				<td th:text="${gameDto.get()}"></td>
+				<td th:text="${gameDto.get()}"></td>
+				<td th:text="${gameDto.get()}"></td>
+				<td th:text="${gameDto.get()}"></td>
+				<td th:text="${gameDto.get()}"></td>
+				<td th:text="${gameDto.get()}"></td>
+				<td th:text="${gameDto.get()}"></td>
+				<td th:text="${gameDto.get()}"></td>
+			</tr>
+		</table>
+
+</body>
+</html>
