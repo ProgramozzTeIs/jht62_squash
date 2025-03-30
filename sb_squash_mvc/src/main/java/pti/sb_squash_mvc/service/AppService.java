@@ -26,15 +26,13 @@ public class AppService {
 		
 		boolean isError = true;
 		
-		if (user != null) {
-			
-			if (user.getPassword().equals(password)) {
-				
-				isError = false;	
-			} 
-			
-			statusDto = new StatusDto (isError);
+		if (user != null && user.getPassword().equals(password)) {
+
+			isError = false;	
+
 		}
+		
+		statusDto = new StatusDto(isError);
 		
 		return statusDto;
 	}

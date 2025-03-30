@@ -39,7 +39,7 @@ public class AppController {
 		
 		StatusDto statusDto = service.logInUser(userName, password);
 		
-		if(statusDto != null && statusDto.getError() == true) {
+		if(statusDto != null && statusDto.isError() == true) {
 			
 			targetPage = "login.html";
 		}

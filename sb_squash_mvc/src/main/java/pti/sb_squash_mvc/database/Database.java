@@ -38,7 +38,10 @@ public class Database {
 		
 		List <User> users = query.getResultList();
 		
-		user = users.get(0);
+		if (users.size() != 0) {
+			
+			user = users.get(0);
+		}
 		
 		tx.commit();
 		session.close();
