@@ -1,5 +1,6 @@
 package pti.sb_squash_mvc.service;
 
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,7 +49,7 @@ public class AppService {
 		return statusDto;
 	}
 	
-	public GameDto showResults(int userId) {
+	public GameDto showResults() {
 			
 		GameDto gameDto = null;
 		MatchDto matchDto = null;
@@ -61,14 +62,14 @@ public class AppService {
 			for(int index = 0; index < games.size(); index++) {
 				Game currentGame = games.get(index);
 					
-				User firstUser = db.getUser(currentGame.getUserId1());
+				User firstUser = db.getUserById(currentGame.getUserId1());
 				if(firstUser != null && !users.contains(firstUser.getId())) {
 						
 					UserDto userDto = new UserDto(firstUser.getId(), firstUser.getName());
 					users.add(userDto);
 						
 				}
-				User secondUser = db.getUser(currentGame.getUserId2());
+				User secondUser = db.getUserById(currentGame.getUserId2());
 				if(secondUser != null && !users.contains(secondUser.getId())) {
 					UserDto userDto = new UserDto(secondUser.getId(), secondUser.getName());
 					users.add(userDto);
@@ -80,6 +81,9 @@ public class AppService {
 					placeDtos.add(placeDto);
 				}
 				
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+				String formattedDate= currentGame.getDate().format(formatter);
+				
 				matchDto = new MatchDto(
 						firstUser.getName(),
 						currentGame.getUser1Points(),
@@ -89,12 +93,12 @@ public class AppService {
 						currentPlace.getAddress(),
 						currentPlace.getPrice(),
 						0,
-						currentGame.getDate());
+						formattedDate);
 				matches.add(matchDto);
 				
 			}
 			
-			gameDto = new GameDto(userId, matches, users, placeDtos);
+			gameDto = new GameDto(1, matches, users, placeDtos);
 		}
 
 		return gameDto;

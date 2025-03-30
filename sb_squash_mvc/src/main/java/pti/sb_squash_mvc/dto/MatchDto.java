@@ -15,10 +15,10 @@ public class MatchDto {
 	private int placePrice;
 	private double placePriceEur;
 	
-	private LocalDateTime gameDate;
+	private String gameDate;
 
 	public MatchDto(String userOneName, int userOnePoints, String userTwoName, int userTwoPoints, String placeName,
-			String placeAddress, int placePrice, double placePriceEur, LocalDateTime gameDate) {
+			String placeAddress, int placePrice, double placePriceEur, String gameDate) {
 		super();
 		this.userOneName = userOneName;
 		this.userOnePoints = userOnePoints;
@@ -95,11 +95,11 @@ public class MatchDto {
 		this.placePriceEur = placePriceEur;
 	}
 
-	public LocalDateTime getGameDate() {
+	public String getGameDate() {
 		return gameDate;
 	}
 
-	public void setGameDate(LocalDateTime gameDate) {
+	public void setGameDate(String gameDate) {
 		this.gameDate = gameDate;
 	}
 

@@ -52,18 +52,49 @@ public class Database {
 	}
 	
 	public List<Game> getAllMatches() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		List<Game> games = null;
+		
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		
+		SelectionQuery<Game> sq = session.createSelectionQuery(
+				"SELECT g FROM Game g", Game.class);
+		
+		games = sq.getResultList();
+		
+		tx.commit();
+		session.close();
+		
+		return games;
 	}
 
-	public User getUser(int userId) {
+	public User getUserById(int userId) {
 		User user = null;
+		
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		
+		user= session.get(User.class, userId);
+		
+		tx.commit();
+		session.close();
+		
 		return user;
 	}
 
 	public Place getPlace(int placeId) {
 		
 		Place place = null;
+		
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		
+		place = session.get(Place.class, placeId);
+		
+		tx.commit();
+		session.close();
+		
 		return place;
 	}
 	

@@ -31,7 +31,7 @@ public class GameDto {
 		return matches;
 	}
 	
-	public void setMaches(List<MatchDto> matches) {
+	public void setMatches(List<MatchDto> matches) {
 		this.matches = matches;
 	}
 	

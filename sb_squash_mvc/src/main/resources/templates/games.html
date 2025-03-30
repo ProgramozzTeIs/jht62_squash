@@ -3,6 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <title>Squash matches</title>
+	<style>
+		table {
+			width: 50%;
+			margin: 20px auto;
+			border: 2px solid #FF0000;
+			border-collepse: collepse;
+			border-spacing: 0;
+			background-color: #E0FFFF;
+		}
+		
+		th {
+			border: 2px solid #FF0000;
+			padding: 10px;
+			border-collepse: collepse;
+			text-align: center;
+		}
+		
+		td {
+			border: 2px solid #FF0000;
+			padding: 8px;
+			border-collepse: collepse;
+			text-align: center;
+		}
+		
+		body {
+			display: flex;
+			text-align: center;
+			width: 100%;
+			color: #191970;
+			font-family: 'Arial', sans-serif;
+			font-style: italic;
+		}
+</style>
 </head>
 <body>
 
@@ -19,16 +52,16 @@
 				<th>Price in HUF</th>
 				<th>Price in EUR</th>
 			</tr>
-			<tr th:each="gameDto : ${gameDto.getMatches()}">
-				<td th:text="${gameDto.get()}"></td>
-				<td th:text="${gameDto.get()}"></td>
-				<td th:text="${gameDto.get()}"></td>
-				<td th:text="${gameDto.get()}"></td>
-				<td th:text="${gameDto.get()}"></td>
-				<td th:text="${gameDto.get()}"></td>
-				<td th:text="${gameDto.get()}"></td>
-				<td th:text="${gameDto.get()}"></td>
-				<td th:text="${gameDto.get()}"></td>
+			<tr th:each="matchDto : ${gameDto.getMatches()}">
+				<td th:text="${matchDto.getGameDate()}"></td>
+				<td th:text="${matchDto.getUserOneName()}"></td>
+				<td th:text="${matchDto.getUserTwoName()}"></td>
+				<td th:text="${matchDto.getUserOnePoints()}"></td>
+				<td th:text="${matchDto.getUserTwoPoints()}"></td>
+				<td th:text="${matchDto.getPlaceName()}"></td>
+				<td th:text="${matchDto.getPlaceAddress()}"></td>
+				<td th:text="${matchDto.getPlacePrice()}"></td>
+				<td th:text="${matchDto.getPlacePriceEur()}"></td>
 			</tr>
 		</table>
 
