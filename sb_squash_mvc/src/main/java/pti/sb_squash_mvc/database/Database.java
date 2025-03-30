@@ -9,6 +9,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.SelectionQuery;
 import org.springframework.stereotype.Repository;
 
+import pti.sb_squash_mvc.model.Game;
+import pti.sb_squash_mvc.model.Place;
 import pti.sb_squash_mvc.model.User;
 
 @Repository
@@ -47,6 +49,22 @@ public class Database {
 		session.close();
 		
 		return user;
+	}
+	
+	public List<Game> getAllMatches() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public User getUser(int userId) {
+		User user = null;
+		return user;
+	}
+
+	public Place getPlace(int placeId) {
+		
+		Place place = null;
+		return place;
 	}
 	
 	

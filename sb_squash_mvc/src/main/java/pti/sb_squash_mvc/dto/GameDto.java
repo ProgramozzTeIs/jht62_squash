@@ -5,15 +5,15 @@ import java.util.List;
 public class GameDto {
 	
 	private int userId;
-	private List<MatchDto> maches;
+	private List<MatchDto> matches;
 	private List<UserDto> allUsers;
 	private List<PlaceDto> allPlaces;
 	
 	
-	public GameDto(int userId, List<MatchDto> maches, List<UserDto> allUsers, List<PlaceDto> allPlaces) {
+	public GameDto(int userId, List<MatchDto> matches, List<UserDto> allUsers, List<PlaceDto> allPlaces) {
 		super();
 		this.userId = userId;
-		this.maches = maches;
+		this.matches = matches;
 		this.allUsers = allUsers;
 		this.allPlaces = allPlaces;
 	}
@@ -27,12 +27,12 @@ public class GameDto {
 		this.userId = userId;
 	}
 		
-	public List<MatchDto> getMaches() {
-		return maches;
+	public List<MatchDto> getMatches() {
+		return matches;
 	}
 	
-	public void setMaches(List<MatchDto> maches) {
-		this.maches = maches;
+	public void setMaches(List<MatchDto> matches) {
+		this.matches = matches;
 	}
 	
 	public List<UserDto> getAllUsers() {
