@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import pti.sb_squash_mvc.database.Database;
 import pti.sb_squash_mvc.dto.StatusDto;
+import pti.sb_squash_mvc.model.User;
 
 @Service
 public class AppService {
@@ -18,8 +19,24 @@ public class AppService {
 	}
 
 	public StatusDto logInUser(String userName, String password) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		StatusDto statusDto = null;
+		
+		User user = db.getUserByName(userName);
+		
+		boolean isError = true;
+		
+		if (user != null) {
+			
+			if (user.getPassword().equals(password)) {
+				
+				isError = false;	
+			} 
+			
+			statusDto = new StatusDto (isError);
+		}
+		
+		return statusDto;
 	}
 
 }
