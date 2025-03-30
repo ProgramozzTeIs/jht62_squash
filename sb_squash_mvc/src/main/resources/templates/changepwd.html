@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>PWD Change</title>
+	</head>
+	<body>
+		<p>Change the Password!</p>
+		
+		<form action="/user/changepwd" method="post">
+			
+			<input type="hidden" name="userId" th:value="${changePwdDto.getUserId()}"/>
+			<input type="hidden" name="oldPwd" th:value="${changePwdDto.getOldPassword()}"/>
+			
+			<p>NEW PASSWORD:<p>
+			
+			<input type="password" name="newPwd" placeholder="Type a new password!"/>
+			<input type="submit" value="SAVE"/>
+		
+		</form>
+	
+	</body>
+</html>
