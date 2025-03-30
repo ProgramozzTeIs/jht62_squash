@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import pti.sb_squash_mvc.dto.StatusDto;
+import pti.sb_squash_mvc.service.AppService;
+
 @Controller
 public class AppController {
 	
