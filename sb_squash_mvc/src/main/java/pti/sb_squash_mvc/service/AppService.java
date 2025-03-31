@@ -96,6 +96,7 @@ public class AppService {
 			}
 			
 			gameDto = new GameDto(1, matches, users, placeDtos);
+			gameDto.sort();
 		}
 
 		return gameDto;
