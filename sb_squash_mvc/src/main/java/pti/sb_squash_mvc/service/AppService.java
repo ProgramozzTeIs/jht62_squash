@@ -49,7 +49,7 @@ public class AppService {
 		return statusDto;
 	}
 	
-	public GameDto showResults() {
+	public GameDto showResults(int userId) {
 			
 		GameDto gameDto = null;
 		MatchDto matchDto = null;
@@ -81,9 +81,6 @@ public class AppService {
 					placeDtos.add(placeDto);
 				}
 				
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-				String formattedDate= currentGame.getDate().format(formatter);
-				
 				matchDto = new MatchDto(
 						firstUser.getName(),
 						currentGame.getUser1Points(),
@@ -92,8 +89,8 @@ public class AppService {
 						currentPlace.getName(),
 						currentPlace.getAddress(),
 						currentPlace.getPrice(),
-						0,
-						formattedDate);
+						userId,
+						currentGame.getDate());
 				matches.add(matchDto);
 				
 			}
