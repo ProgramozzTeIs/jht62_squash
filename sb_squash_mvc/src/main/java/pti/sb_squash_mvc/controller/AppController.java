@@ -51,5 +51,20 @@ public class AppController {
 
 	}
 	
+	@GetMapping("/user/search/name")
+	public String getGamesByFilteredName (
+				Model model,
+				@RequestParam("uid") int userId,
+				@RequestParam("filtername") int filterNameId
+			
+			) {
+		
+		GameDto gameDto = service.getAllGamesByIds(userId, filterNameId);
+		
+		model.addAttribute("gameDto", gameDto);
+		
+		return "games.html";
+	}
+	
 
 }

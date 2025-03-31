@@ -104,4 +104,67 @@ public class AppService {
 		return gameDto;
 	}
 
+	public GameDto getAllGamesByIds(int userId, int filterNameId) {
+		
+		GameDto gameDto = null;
+		MatchDto matchDto = null;
+		
+		List <MatchDto> matches = new ArrayList<>();
+		List <UserDto> users = new ArrayList<>();
+		List <PlaceDto> placeDtos = new ArrayList<>();
+		
+		User user = db.getUserById(userId);
+		
+		if (user != null && user.isLoggedIn() == true) {
+			
+			List <Game> userGames = db.getAllMatchesByNameId(filterNameId);		
+			
+			for (int index = 0; index < userGames.size(); index ++) {
+				
+				Game filteredGame = userGames.get(index);			
+				User userOne = db.getUserById(filteredGame.getUserId1());
+				if (userOne != null) {
+					
+					UserDto filteredUserOne = new UserDto(userOne.getId(), userOne.getName());
+					users.add(filteredUserOne);
+				}
+				
+				User userTwo = db.getUserById(filteredGame.getUserId2());
+				if(userTwo != null) {
+					
+					UserDto filteredUserTwo = new UserDto(userTwo.getId(), userTwo.getName());
+					users.add(filteredUserTwo);
+				}
+				
+				Place filteredPlace = db.getPlace(filteredGame.getPlaceId());
+				if (filteredPlace != null) {
+					
+					PlaceDto filteredPlaceDto = new PlaceDto(filteredPlace.getId(), filteredPlace.getName());
+					placeDtos.add(filteredPlaceDto);
+				}
+				
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+				String formattedDate = filteredGame.getDate().format(formatter);
+				
+				matchDto = new MatchDto(
+						userOne.getName(),
+						filteredGame.getUser1Points(),
+						userTwo.getName(),
+						filteredGame.getUser2Points(),
+						filteredPlace.getName(),
+						filteredPlace.getAddress(),
+						filteredPlace.getPrice(),
+						0,
+						formattedDate		
+						);
+				
+				matches.add(matchDto);
+			}
+			
+			gameDto = new GameDto(filterNameId, matches, users, placeDtos);
+		}
+		
+		return gameDto;
+	}
+
 }

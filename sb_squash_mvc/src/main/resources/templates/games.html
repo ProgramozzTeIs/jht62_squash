@@ -64,6 +64,21 @@
 				<td th:text="${matchDto.getPlacePriceEur()}"></td>
 			</tr>
 		</table>
+		
+		<p> Choose a registered player </p>
+		
+		<form action="/user/search/name" method="get">
+			
+			<input type="hidden" name="uid" th:value="${gameDto.getAllUsers().getUserId()}"/>
+			
+			<select name="filtername">
+				<option>Select a player</option>
+				<option th:each=" players : ${gameDto.getAllUsers()}" th:text="${players.getUserName()}" th:value="${players.getUserId()}"></option>
+			</select>
+		
+		<input type="submit" value="Playername"/>
+		</form>
+		
 
 </body>
 </html>

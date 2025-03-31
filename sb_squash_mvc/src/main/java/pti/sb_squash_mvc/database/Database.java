@@ -97,6 +97,27 @@ public class Database {
 		
 		return place;
 	}
+
+	public List <Game> getAllMatchesByNameId(int filterNameId) {
+		
+		List <Game> games = null;
+		
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		
+		SelectionQuery <Game> query = session.createSelectionQuery(
+				"SELECT f FROM Game f WHERE f.userId1 = ?1 OR f.userId2 = ?2", Game.class);
+		
+		query.setParameter(1, filterNameId);
+		query.setParameter(2, filterNameId);
+		
+		games = query.getResultList();
+		
+		tx.commit();
+		session.close();
+		
+		return games;
+	}
 	
 	
 
