@@ -1,5 +1,6 @@
 package pti.sb_squash_mvc.dto;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class GameDto {
@@ -49,5 +50,24 @@ public class GameDto {
 	
 	public void setAllPlaces(List<PlaceDto> allPlaces) {
 		this.allPlaces = allPlaces;
+	}
+	
+	public void sort() {
+		
+		for(int currentIndex = 0; currentIndex < matches.size(); currentIndex++) {
+			MatchDto currentMatch = matches.get(currentIndex);
+			LocalDateTime currentMatchDate = currentMatch.getGameDate();
+			for(int nextIndex = 0; nextIndex < matches.size(); nextIndex++) {
+				MatchDto nextMatch = matches.get(nextIndex);
+				LocalDateTime nextMatchDate = nextMatch.getGameDate();
+				
+				if(nextMatchDate.isBefore(currentMatchDate)) {
+					matches.set(nextIndex, currentMatch);
+					matches.set(currentIndex, nextMatch);
+					currentIndex--;
+					break;
+				}
+			}
+		}
 	}
 }
