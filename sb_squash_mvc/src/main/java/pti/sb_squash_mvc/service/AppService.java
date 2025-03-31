@@ -141,9 +141,6 @@ public class AppService {
 					placeDtos.add(filteredPlaceDto);
 				}
 				
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-				String formattedDate = filteredGame.getDate().format(formatter);
-				
 				matchDto = new MatchDto(
 						userOne.getName(),
 						filteredGame.getUser1Points(),
@@ -153,7 +150,7 @@ public class AppService {
 						filteredPlace.getAddress(),
 						filteredPlace.getPrice(),
 						0,
-						formattedDate		
+						filteredGame.getDate()	
 						);
 				
 				matches.add(matchDto);
