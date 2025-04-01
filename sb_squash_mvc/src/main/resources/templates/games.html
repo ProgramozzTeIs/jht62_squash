@@ -69,7 +69,7 @@
 		
 		<form action="/user/search/name" method="get">
 			
-			<input type="hidden" name="uid" th:value="${gameDto.getAllUsers().getUserId()}"/> <!-- TODO Get LoggedIn UserID -->
+			<input type="hidden" name="uid" th:value="${gameDto.getUserId()}"/> 
 			
 			<select name="filtername">
 				<option>Select a player</option>

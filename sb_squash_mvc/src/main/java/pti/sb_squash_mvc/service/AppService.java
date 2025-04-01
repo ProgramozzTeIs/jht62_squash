@@ -34,15 +34,15 @@ public class AppService {
 		
 		LoginUserDto lud = null;
 		
-		User user = db.getUserByName(userName); // TODO filter by Name + Password
+		User user = db.getUserByName(userName, password); 
 		
-		
-		if (user != null && user.getPassword().equals(password)) {
+		if (user != null) {
 
 			lud = new LoginUserDto(user.isFirstLogin(), user.getRole());
-			// TODO Update User Login status
+			
+			user.setLoggedIn(true);
+			db.updateUserLogInStatus(user);
 		}
-		
 		
 		
 		return lud;
@@ -116,63 +116,97 @@ public class AppService {
 		
 		if (user != null && user.isLoggedIn() == true) {
 			
-			List <Game> userGames = new ArrayList<>();
+			//if(filterPlaceId != 0) {
+				
+				//userGames = db.getAllMatchesByNameId(filterPlaceId); // TODO Get games by Place ID from DB
+				
+			//} else {
+				
+			//	userGames = db.getAllMatchesByNameId(filterNameId);
+			//}
 			
-			if(filterPlaceId != 0) {
-				
-				userGames = db.getAllMatchesByNameId(filterPlaceId); // TODO Get games by Place ID from DB
-				
-			} else {
-				
-				userGames = db.getAllMatchesByNameId(filterNameId);
-			}
+			List <Game> userGames = db.getAllMatches();
 			
 			for (int index = 0; index < userGames.size(); index ++) {
 				
-				Game filteredGame = userGames.get(index);	
+				Game currentGame = userGames.get(index);
 				
+				User userOne = db.getUserById(currentGame.getUserId1());
 				
-				// TODO Calculate <users> and <placeDtos> from all games
-				User userOne = db.getUserById(filteredGame.getUserId1());
-				if (userOne != null) { // TODO Create own contains() method, users contains the current user?
+				if (userOne != null) { 
 					
-					UserDto filteredUserOne = new UserDto(userOne.getId(), userOne.getName());
-					users.add(filteredUserOne);
+					UserDto userOneDto = new UserDto(userOne.getId(), userOne.getName());
+					
+					boolean isUserInTheList = false;
+					
+					for (int usersIndex = 0; usersIndex < users.size(); usersIndex ++) {
+						
+						UserDto userDto = users.get(usersIndex);
+						
+						if (userOneDto.getUserId() == userDto.getUserId()) {
+							
+							isUserInTheList = true;		
+						}
+					}
+					
+					if (isUserInTheList != true) {
+						
+						users.add(userOneDto);
+					}
 				}
 				
-				User userTwo = db.getUserById(filteredGame.getUserId2());
-				if(userTwo != null) { // TODO Create own contains() method, users contains the current user?
+				User userTwo = db.getUserById(currentGame.getUserId2());
+				
+				if (userTwo != null) { 
 					
-					UserDto filteredUserTwo = new UserDto(userTwo.getId(), userTwo.getName());
-					users.add(filteredUserTwo);
+					UserDto userTwoDto = new UserDto(userTwo.getId(), userTwo.getName());
+					
+					boolean isUserInTheList = false;
+					
+					for (int usersIndex = 0; usersIndex < users.size(); usersIndex ++) {
+						
+						UserDto userDto = users.get(usersIndex);
+						
+						if (userTwoDto.getUserId() == userDto.getUserId()) {
+							
+							isUserInTheList = true;		
+						}
+					}
+					
+					if (isUserInTheList != true) {
+						
+						users.add(userTwoDto);
+					}
 				}
 				
-				Place filteredPlace = db.getPlace(filteredGame.getPlaceId());
+				Place filteredPlace = db.getPlace(currentGame.getPlaceId());
 				if (filteredPlace != null) { // TODO Create own contains() method, placeDtos contains the current place?
-					
+						
 					PlaceDto filteredPlaceDto = new PlaceDto(filteredPlace.getId(), filteredPlace.getName());
 					placeDtos.add(filteredPlaceDto);
 				}
-				// TODO Calculate <users> and <placeDtos> from all games
+			
+
+			// TODO Calculate <users> and <placeDtos> from all games
 				
 				
-				matchDto = new MatchDto(
-						userOne.getName(),
-						filteredGame.getUser1Points(),
-						userTwo.getName(),
-						filteredGame.getUser2Points(),
-						filteredPlace.getName(),
-						filteredPlace.getAddress(),
-						filteredPlace.getPrice(),
-						0,
-						filteredGame.getDate()	
-						);
+			matchDto = new MatchDto(
+					userOne.getName(),
+					currentGame.getUser1Points(),
+					userTwo.getName(),
+					currentGame.getUser2Points(),
+					filteredPlace.getName(),
+					filteredPlace.getAddress(),
+					filteredPlace.getPrice(),
+					0,
+					currentGame.getDate()	
+					);
 				
-				matches.add(matchDto);
-			}
+			matches.add(matchDto);
+			}	
+		}
 			
 			gameDto = new GameDto(filterNameId, matches, users, placeDtos); // TODO Use userId for instantiation
-		}
 		
 		return gameDto;
 	}

@@ -26,7 +26,7 @@ public class Database {
 		this.sessionFactory = cfg.buildSessionFactory();
 	}
 	
-	public User getUserByName(String userName) {
+	public User getUserByName(String userName, String password) {
 		
 		User user = null;
 		
@@ -34,9 +34,10 @@ public class Database {
 		Transaction tx = session.beginTransaction();
 		
 		SelectionQuery <User> query = 
-				session.createSelectionQuery("SELECT u FROM User u WHERE u.name = ?1", User.class); // TODO filter by Name + Password
+				session.createSelectionQuery("SELECT u FROM User u WHERE u.name = ?1 AND u.password = ?2", User.class); 
 		
 		query.setParameter(1, userName);
+		query.setParameter(2, password);
 		
 		List <User> users = query.getResultList();
 		
@@ -106,10 +107,9 @@ public class Database {
 		Transaction tx = session.beginTransaction();
 		
 		SelectionQuery <Game> query = session.createSelectionQuery(
-				"SELECT f FROM Game f WHERE f.userId1 = ?1 OR f.userId2 = ?2", Game.class); // TODO Use ?1 for both parameter
+				"SELECT f FROM Game f WHERE f.userId1 = ?1 OR f.userId2 = ?1", Game.class); 
 		
 		query.setParameter(1, filterNameId);
-		query.setParameter(2, filterNameId); // TODO Use ?1 for both parameter
 		
 		games = query.getResultList();
 		
@@ -137,6 +137,18 @@ public class Database {
 		session.close();
 		
 		return games;
+	}
+
+	public void updateUserLogInStatus(User user) {
+		
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		
+		session.merge(user);
+		
+		tx.commit();
+		session.close();
+		
 	}
 	
 	
