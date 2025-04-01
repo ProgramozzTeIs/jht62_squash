@@ -57,7 +57,7 @@ public class GameDto {
 		for(int currentIndex = 0; currentIndex < matches.size(); currentIndex++) {
 			MatchDto currentMatch = matches.get(currentIndex);
 			LocalDateTime currentMatchDate = currentMatch.getGameDate();
-			for(int nextIndex = 0; nextIndex < matches.size(); nextIndex++) {
+			for(int nextIndex = currentIndex + 1; nextIndex < matches.size(); nextIndex++) {
 				MatchDto nextMatch = matches.get(nextIndex);
 				LocalDateTime nextMatchDate = nextMatch.getGameDate();
 				
