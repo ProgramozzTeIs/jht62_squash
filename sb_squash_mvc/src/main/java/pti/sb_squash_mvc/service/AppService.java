@@ -102,7 +102,7 @@ public class AppService {
 		return gameDto;
 	}
 
-	public GameDto getAllGamesByIds(int userId, int filterNameId) {
+	public GameDto getAllGamesByIds(int userId, int filterNameId, int filterPlaceId) {
 		
 		GameDto gameDto = null;
 		MatchDto matchDto = null;
@@ -115,7 +115,16 @@ public class AppService {
 		
 		if (user != null && user.isLoggedIn() == true) {
 			
-			List <Game> userGames = db.getAllMatchesByNameId(filterNameId);		
+			List <Game> userGames = new ArrayList<>();
+			
+			if(filterPlaceId != 0) {
+				
+				userGames = db.getAllMatchesByNameId(filterPlaceId);
+				
+			} else {
+				
+				userGames = db.getAllMatchesByNameId(filterNameId);
+			}
 			
 			for (int index = 0; index < userGames.size(); index ++) {
 				

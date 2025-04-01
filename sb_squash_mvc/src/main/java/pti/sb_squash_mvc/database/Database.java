@@ -119,6 +119,26 @@ public class Database {
 		return games;
 	}
 	
+	public List<Game> getAllMatchesByPlaceId(int placeId) {
+		
+		List<Game> games = null;
+		
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		
+		SelectionQuery<Game> query = session.createSelectionQuery(
+				"SELECT p FROM Game p WHERE p.placeId = ?1", Game.class);
+		
+		query.setParameter(1, placeId);
+		
+		games = query.getResultList();
+		
+		tx.commit();
+		session.close();
+		
+		return games;
+	}
+	
 	
 
 }

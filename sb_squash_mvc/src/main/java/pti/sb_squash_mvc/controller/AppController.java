@@ -59,7 +59,22 @@ public class AppController {
 			
 			) {
 		
-		GameDto gameDto = service.getAllGamesByIds(userId, filterNameId);
+		GameDto gameDto = service.getAllGamesByIds(userId, filterNameId, 0);
+		
+		model.addAttribute("gameDto", gameDto);
+		
+		return "games.html";
+	}
+	
+	@GetMapping("/user/search/place")
+	public String getGamesByFilteredPlace (
+				Model model,
+				@RequestParam("uid") int userId,
+				@RequestParam("filterplace") int filterPlaceId
+			
+			) {
+		
+		GameDto gameDto = service.getAllGamesByIds(userId, 0, filterPlaceId);
 		
 		model.addAttribute("gameDto", gameDto);
 		

@@ -79,6 +79,21 @@
 		<input type="submit" value="Playername"/>
 		</form>
 		
+		<br>
+		
+		<p> Choose a place </p>
+		
+		<form action="/user/search/place" method="get">
+			
+			<input type="hidden" name="uid" th:value="${gameDto.getAllUsers().getUserId()}"/>
+			
+			<select name="filterplace">
+				<option>Select a place</option>
+				<option th:each=" places : ${gameDto.getAllPlaces()}" th:text="${places.getName()}" th:value="${places.getPlaceId()}"></option>
+			</select>
+		
+		<input type="submit" value="Placename"/>
+		</form>
 
 </body>
 </html>
