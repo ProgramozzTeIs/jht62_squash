@@ -85,7 +85,7 @@
 		
 		<form action="/user/search/place" method="get">
 			
-			<input type="hidden" name="uid" th:value="${gameDto.getAllUsers().getUserId()}"/> <!-- TODO Get LoggedIn UserID -->
+			<input type="hidden" name="uid" th:value="${gameDto.getUserId()}"/>
 			
 			<select name="filterplace">
 				<option>Select a place</option>
@@ -97,3 +97,4 @@
 
 </body>
 </html>
+
