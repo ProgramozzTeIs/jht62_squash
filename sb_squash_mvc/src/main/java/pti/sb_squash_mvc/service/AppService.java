@@ -90,13 +90,13 @@ public class AppService {
 						currentPlace.getName(),
 						currentPlace.getAddress(),
 						currentPlace.getPrice(),
-						userId,
+						0,
 						currentGame.getDate());
 				matches.add(matchDto);
 				
 			}
 			
-			gameDto = new GameDto(1, matches, users, placeDtos); // TODO Use userId for instantiation
+			gameDto = new GameDto(userId, matches, users, placeDtos); 
 			gameDto.sort(); 
 		}
 
