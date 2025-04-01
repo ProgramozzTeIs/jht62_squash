@@ -1,6 +1,5 @@
 package pti.sb_squash_mvc.service;
 
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import pti.sb_squash_mvc.database.Database;
 import pti.sb_squash_mvc.dto.GameDto;
+import pti.sb_squash_mvc.dto.LoginUserDto;
 import pti.sb_squash_mvc.dto.MatchDto;
 import pti.sb_squash_mvc.dto.PlaceDto;
 import pti.sb_squash_mvc.dto.StatusDto;
@@ -30,23 +30,22 @@ public class AppService {
 		this.db = db;
 	}
 
-	public StatusDto logInUser(String userName, String password) {
+	public LoginUserDto logInUser(String userName, String password) {
 		
-		StatusDto statusDto = null;
+		LoginUserDto lud = null;
 		
-		User user = db.getUserByName(userName);
+		User user = db.getUserByName(userName); // TODO filter by Name + Password
 		
-		boolean isError = true;
 		
 		if (user != null && user.getPassword().equals(password)) {
 
-			isError = false;	
-
+			lud = new LoginUserDto(user.isFirstLogin(), user.getRole());
+			// TODO Update User Login status
 		}
 		
-		statusDto = new StatusDto(isError);
 		
-		return statusDto;
+		
+		return lud;
 	}
 	
 	public GameDto showResults(int userId) {
@@ -56,27 +55,29 @@ public class AppService {
 		List<MatchDto> matches = new ArrayList<>();
 		List<UserDto> users = new ArrayList<>();
 		List<PlaceDto> placeDtos = new ArrayList<>();
-			
+		
+		// TODO Login status check
+		
 		List<Game> games = db.getAllMatches();
 		if(games != null) {
 			for(int index = 0; index < games.size(); index++) {
 				Game currentGame = games.get(index);
 					
 				User firstUser = db.getUserById(currentGame.getUserId1());
-				if(firstUser != null && !users.contains(firstUser.getId())) {
+				if(firstUser != null && !users.contains(firstUser)) { // TODO Create own contains() method, users contains the current user?
 						
 					UserDto userDto = new UserDto(firstUser.getId(), firstUser.getName());
 					users.add(userDto);
 						
 				}
 				User secondUser = db.getUserById(currentGame.getUserId2());
-				if(secondUser != null && !users.contains(secondUser.getId())) {
+				if(secondUser != null && !users.contains(secondUser)) { // // TODO Create own contains() method, users contains the current user?
 					UserDto userDto = new UserDto(secondUser.getId(), secondUser.getName());
 					users.add(userDto);
 				}
 					
 				Place currentPlace = db.getPlace(currentGame.getPlaceId());
-				if(currentPlace != null && !placeDtos.contains(currentPlace)) {
+				if(currentPlace != null && !placeDtos.contains(currentPlace)) { // TODO Create own contains() method, placeDtos contains the current place?
 					PlaceDto placeDto = new PlaceDto(currentPlace.getId(), currentPlace.getName());
 					placeDtos.add(placeDto);
 				}
@@ -95,8 +96,8 @@ public class AppService {
 				
 			}
 			
-			gameDto = new GameDto(1, matches, users, placeDtos);
-			gameDto.sort();
+			gameDto = new GameDto(1, matches, users, placeDtos); // TODO Use userId for instantiation
+			gameDto.sort(); 
 		}
 
 		return gameDto;
@@ -119,7 +120,7 @@ public class AppService {
 			
 			if(filterPlaceId != 0) {
 				
-				userGames = db.getAllMatchesByNameId(filterPlaceId);
+				userGames = db.getAllMatchesByNameId(filterPlaceId); // TODO Get games by Place ID from DB
 				
 			} else {
 				
@@ -128,27 +129,32 @@ public class AppService {
 			
 			for (int index = 0; index < userGames.size(); index ++) {
 				
-				Game filteredGame = userGames.get(index);			
+				Game filteredGame = userGames.get(index);	
+				
+				
+				// TODO Calculate <users> and <placeDtos> from all games
 				User userOne = db.getUserById(filteredGame.getUserId1());
-				if (userOne != null) {
+				if (userOne != null) { // TODO Create own contains() method, users contains the current user?
 					
 					UserDto filteredUserOne = new UserDto(userOne.getId(), userOne.getName());
 					users.add(filteredUserOne);
 				}
 				
 				User userTwo = db.getUserById(filteredGame.getUserId2());
-				if(userTwo != null) {
+				if(userTwo != null) { // TODO Create own contains() method, users contains the current user?
 					
 					UserDto filteredUserTwo = new UserDto(userTwo.getId(), userTwo.getName());
 					users.add(filteredUserTwo);
 				}
 				
 				Place filteredPlace = db.getPlace(filteredGame.getPlaceId());
-				if (filteredPlace != null) {
+				if (filteredPlace != null) { // TODO Create own contains() method, placeDtos contains the current place?
 					
 					PlaceDto filteredPlaceDto = new PlaceDto(filteredPlace.getId(), filteredPlace.getName());
 					placeDtos.add(filteredPlaceDto);
 				}
+				// TODO Calculate <users> and <placeDtos> from all games
+				
 				
 				matchDto = new MatchDto(
 						userOne.getName(),
@@ -165,7 +171,7 @@ public class AppService {
 				matches.add(matchDto);
 			}
 			
-			gameDto = new GameDto(filterNameId, matches, users, placeDtos);
+			gameDto = new GameDto(filterNameId, matches, users, placeDtos); // TODO Use userId for instantiation
 		}
 		
 		return gameDto;

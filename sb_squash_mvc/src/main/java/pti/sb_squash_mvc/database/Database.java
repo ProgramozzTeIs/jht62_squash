@@ -34,7 +34,7 @@ public class Database {
 		Transaction tx = session.beginTransaction();
 		
 		SelectionQuery <User> query = 
-				session.createSelectionQuery("SELECT u FROM User u WHERE u.name = ?1", User.class);
+				session.createSelectionQuery("SELECT u FROM User u WHERE u.name = ?1", User.class); // TODO filter by Name + Password
 		
 		query.setParameter(1, userName);
 		
@@ -106,10 +106,10 @@ public class Database {
 		Transaction tx = session.beginTransaction();
 		
 		SelectionQuery <Game> query = session.createSelectionQuery(
-				"SELECT f FROM Game f WHERE f.userId1 = ?1 OR f.userId2 = ?2", Game.class);
+				"SELECT f FROM Game f WHERE f.userId1 = ?1 OR f.userId2 = ?2", Game.class); // TODO Use ?1 for both parameter
 		
 		query.setParameter(1, filterNameId);
-		query.setParameter(2, filterNameId);
+		query.setParameter(2, filterNameId); // TODO Use ?1 for both parameter
 		
 		games = query.getResultList();
 		

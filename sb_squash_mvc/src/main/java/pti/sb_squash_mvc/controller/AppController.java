@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import pti.sb_squash_mvc.dto.GameDto;
+import pti.sb_squash_mvc.dto.LoginUserDto;
 import pti.sb_squash_mvc.dto.StatusDto;
 import pti.sb_squash_mvc.service.AppService;
 
@@ -38,14 +39,30 @@ public class AppController {
 		
 		String targetPage = "";
 		
-		StatusDto statusDto = service.logInUser(userName, password);
+		LoginUserDto lud = service.logInUser(userName, password);
 		
-		if(statusDto != null && statusDto.isError() == true) {
-			
+		if(lud == null) {
+			StatusDto statusDto = new StatusDto(true);
+			model.addAttribute("statusDto", statusDto);
 			targetPage = "login.html";
 		}
+		else if (lud.isFirstLogin() == true) {
+			
+			// TODO Get ChangePwdDto
+			targetPage = "changepwd.html";
+		}
+		else if (lud.getRole().equals("admin")) {
+			
+			// TODO Get AdminDto
+			targetPage = "admin.html";
+		}
+		else {
+			
+			// TODO Get GameDto
+			targetPage = "game.html";
+		}
 		
-		model.addAttribute("statusDto", statusDto);
+		
 		
 		return targetPage;
 
