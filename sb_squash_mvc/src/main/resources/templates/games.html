@@ -60,8 +60,8 @@
 				<td th:text="${matchDto.getUserTwoPoints()}"></td>
 				<td th:text="${matchDto.getPlaceName()}"></td>
 				<td th:text="${matchDto.getPlaceAddress()}"></td>
-				<td th:text="${matchDto.getPlacePrice()}"></td>
-				<td th:text="${matchDto.getPlacePriceEur()}"></td>
+				<td th:text="${matchDto.getPlacePrice() + ' HUF'}"></td>
+				<td th:text="${matchDto.getPlacePriceEur() + ' €'}"></td>
 			</tr>
 		</table>
 		
