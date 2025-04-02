@@ -150,6 +150,54 @@ public class Database {
 		session.close();
 		
 	}
+
+	public void saveNewUser(User registerPlayer) {
+		
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		
+		session.persist(registerPlayer);
+		
+		tx.commit();
+		session.close();
+		
+	}
+
+	public List<User> getAllUsers() {
+		
+		List <User> users = null;
+		
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		
+		SelectionQuery<User> query = session.createSelectionQuery(
+				"SELECT u FROM User u", User.class);
+		
+		users = query.getResultList();
+		
+		tx.commit();
+		session.close();
+		
+		return users;
+	}
+
+	public List<Place> getAllPlaces() {
+		
+		List <Place> places = null;
+		
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		
+		SelectionQuery<Place> query = session.createSelectionQuery(
+				"SELECT p FROM Place p", Place.class);
+		
+		places = query.getResultList();
+		
+		tx.commit();
+		session.close();
+		
+		return places;
+	}
 	
 	
 

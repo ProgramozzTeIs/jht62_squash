@@ -114,6 +114,21 @@ public class AppController {
 		
 		return "admin.html";
 	}
+	
+	@PostMapping("/admin/reg/user")
+	public String registerNewUser (
+				Model model,
+				@RequestParam("uid") int userId,
+				@RequestParam("uname") String userName,
+				@RequestParam("urole") String userRole
+			) {
+		
+		AdminDto adminDto = service.registerUser(userId, userName, userRole);
+		
+		model.addAttribute("adminDto", adminDto);
+
+		return "admin.html";
+	}
 
 }
 

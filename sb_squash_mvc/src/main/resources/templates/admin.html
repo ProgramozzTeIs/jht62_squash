@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<p>Register a User</p>
+	
+	<form action="/admin/reg/user" method="post">
+		<input type="hidden" name="uid" th:value="${adminDto.getUserId()}"/>
+		<input type="text" name="uname" placeholder="Username"/>
+		<input type="text" name="urole" placeholder="User Role"/>
+		<input type="submit"/>
+	</form>
+
+
+
+
+</body>
+</html>

@@ -2,6 +2,7 @@ package pti.sb_squash_mvc.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,6 @@ import pti.sb_squash_mvc.dto.GameDto;
 import pti.sb_squash_mvc.dto.LoginUserDto;
 import pti.sb_squash_mvc.dto.MatchDto;
 import pti.sb_squash_mvc.dto.PlaceDto;
-import pti.sb_squash_mvc.dto.StatusDto;
 import pti.sb_squash_mvc.dto.UserDto;
 import pti.sb_squash_mvc.model.Game;
 import pti.sb_squash_mvc.model.Place;
@@ -222,6 +222,72 @@ public class AppService {
 	public AdminDto registerPlace(int userId, String newPlaceName, int newPlacePrice, String newPlaceAddress) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public AdminDto registerUser(int userId, String userName, String userRole) {
+		
+		AdminDto adminDto = null;
+		
+		List <UserDto> userDtos = new ArrayList<>();
+		List <PlaceDto> placeDtos = new ArrayList<>();
+		
+		User user = db.getUserById(userId);
+		
+		if (user != null && user.getRole().equals("admin")) {
+			
+			if(!user.getName().equals(userName) && user.getRole().equals(userRole)) {
+				
+				Random random = new Random();
+				
+				int password = 1000 + random.nextInt(9000);
+				
+				String generatedPassword = String.valueOf(password);
+				
+				User registerPlayer = new User();
+				
+				registerPlayer.setName(userName);
+				registerPlayer.setPassword(generatedPassword);
+				registerPlayer.setRole(userRole);
+				registerPlayer.setFirstLogin(true);
+				registerPlayer.setLoggedIn(false);
+				
+				db.saveNewUser(registerPlayer);
+			}
+
+			List <User> allUsers = db.getAllUsers();
+			List <Place> allPlaces = db.getAllPlaces();
+			
+			for(int usersIndex = 0; usersIndex < allUsers.size(); usersIndex ++) {
+				
+				User currentUser = allUsers.get(usersIndex);
+				
+				UserDto userDto = new UserDto(currentUser.getId(), currentUser.getName());
+				
+				userDtos.add(userDto);
+			}
+			
+			for(int placesIndex = 0; placesIndex < allPlaces.size(); placesIndex ++) {
+				
+				Place currentPlace = allPlaces.get(placesIndex);
+				
+				PlaceDto placeDto = new PlaceDto(
+							currentPlace.getId(),
+							currentPlace.getName(),
+							currentPlace.getAddress(),
+							currentPlace.getPrice()
+						);
+				
+				placeDtos.add(placeDto);
+			}
+			
+			adminDto = new AdminDto(
+					userId,
+					userDtos,
+					placeDtos
+					);
+		}
+
+		return adminDto;
 	}
 	
 	private void addUserToList(User user, List<UserDto> users) {
