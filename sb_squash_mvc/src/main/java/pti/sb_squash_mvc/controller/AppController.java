@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import pti.sb_squash_mvc.dto.AdminDto;
 import pti.sb_squash_mvc.dto.GameDto;
 import pti.sb_squash_mvc.dto.LoginUserDto;
 import pti.sb_squash_mvc.dto.StatusDto;
@@ -98,5 +99,25 @@ public class AppController {
 		return "games.html";
 	}
 	
+	@PostMapping("/admin/reg/place")
+	public String registerNewPlace(
+				Model model,
+				@RequestParam("uid") int userId,
+				@RequestParam("name") String newPlaceName,
+				@RequestParam("price") int newPlacePrice,
+				@RequestParam("address") String newPlaceAddress
+			
+			) {
+		AdminDto adminDto = service.registerPlace(userId, newPlaceName, newPlacePrice, newPlaceAddress);
+		
+		model.addAttribute("adminDto", adminDto);
+		
+		return "admin.html";
+	}
 
 }
+
+
+
+
+

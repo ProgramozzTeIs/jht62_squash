@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import pti.sb_squash_mvc.database.Database;
+import pti.sb_squash_mvc.dto.AdminDto;
 import pti.sb_squash_mvc.dto.GameDto;
 import pti.sb_squash_mvc.dto.LoginUserDto;
 import pti.sb_squash_mvc.dto.MatchDto;
@@ -118,7 +119,7 @@ public class AppService {
 			
 			//if(filterPlaceId != 0) {
 				
-				//userGames = db.getAllMatchesByNameId(filterPlaceId); // TODO Get games by Place ID from DB
+				//userGames = db.getAllMatchesByPlaceId(filterPlaceId);
 				
 			//} else {
 				
@@ -209,6 +210,11 @@ public class AppService {
 			gameDto = new GameDto(filterNameId, matches, users, placeDtos); // TODO Use userId for instantiation
 		
 		return gameDto;
+	}
+
+	public AdminDto registerPlace(int userId, String newPlaceName, int newPlacePrice, String newPlaceAddress) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
