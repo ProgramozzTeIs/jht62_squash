@@ -65,22 +65,29 @@ public class AppService {
 				Game currentGame = games.get(index);
 					
 				User firstUser = db.getUserById(currentGame.getUserId1());
-				if(firstUser != null && !users.contains(firstUser)) { // TODO Create own contains() method, users contains the current user?
-						
-					UserDto userDto = new UserDto(firstUser.getId(), firstUser.getName());
-					users.add(userDto);
-						
-				}
+				addUserToList(firstUser, users);	
+				
 				User secondUser = db.getUserById(currentGame.getUserId2());
-				if(secondUser != null && !users.contains(secondUser)) { // // TODO Create own contains() method, users contains the current user?
-					UserDto userDto = new UserDto(secondUser.getId(), secondUser.getName());
-					users.add(userDto);
-				}
+				addUserToList(secondUser,users);
+				
 					
 				Place currentPlace = db.getPlace(currentGame.getPlaceId());
-				if(currentPlace != null && !placeDtos.contains(currentPlace)) { // TODO Create own contains() method, placeDtos contains the current place?
-					PlaceDto placeDto = new PlaceDto(currentPlace.getId(), currentPlace.getName());
-					placeDtos.add(placeDto);
+				
+				if(currentPlace != null) { 
+					boolean placeExist = false;
+					for(int containIndex = 0; containIndex < placeDtos.size(); containIndex++) {
+						PlaceDto currentPlaceDto = placeDtos.get(containIndex);
+						if(currentPlace.getId() == currentPlaceDto.getPlaceId()) {
+							placeExist = true;
+							break;
+						}
+						else {
+							
+							PlaceDto placeDto = new PlaceDto(currentPlace.getId(), currentPlace.getName());
+							placeDtos.add(placeDto);
+							
+						}
+					}
 				}
 				
 				matchDto = new MatchDto(
@@ -215,6 +222,25 @@ public class AppService {
 	public AdminDto registerPlace(int userId, String newPlaceName, int newPlacePrice, String newPlaceAddress) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	private void addUserToList(User user, List<UserDto> users) {
+		
+		if(user != null) {
+			boolean userExist = false;
+			for(int containIndex = 0; containIndex < users.size(); containIndex++) {
+				UserDto userDto = users.get(containIndex);
+				if(user.getId() == userDto.getUserId()) {
+					userExist = true;
+					break;
+				}
+				else {
+					UserDto newUser = new UserDto(user.getId(), user.getName());
+					users.add(newUser);
+				}
+				
+			}
+		}
 	}
 
 }

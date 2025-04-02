@@ -61,7 +61,7 @@ public class GameDto {
 				MatchDto nextMatch = matches.get(nextIndex);
 				LocalDateTime nextMatchDate = nextMatch.getGameDate();
 				
-				if(nextMatchDate.isBefore(currentMatchDate)) {
+				if(nextMatchDate.isAfter(currentMatchDate)) {
 					matches.set(nextIndex, currentMatch);
 					matches.set(currentIndex, nextMatch);
 					currentIndex--;
