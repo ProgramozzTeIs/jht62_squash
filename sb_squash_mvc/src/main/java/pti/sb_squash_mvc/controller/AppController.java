@@ -59,8 +59,9 @@ public class AppController {
 		}
 		else {
 			
-			// TODO Get GameDto
-			targetPage = "game.html";
+			GameDto gameDto = service.showResults(lud.getUserId());
+			model.addAttribute("gameDto", gameDto);
+			targetPage = "games.html";
 		}
 		
 		
