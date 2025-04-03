@@ -126,131 +126,56 @@ public class AppService {
 		
 		if (user != null && user.isLoggedIn() == true) {
 			
-			List<Game> userGames = new ArrayList<>();
-			
-			if(filterPlaceId != 0) {
-				
-				userGames = db.getAllMatchesByPlaceId(filterPlaceId);
-				
-			} else if (filterNameId != 0) {
-				
-				userGames = db.getAllMatchesByNameId(filterNameId);
-			} else {
-				
-				userGames = db.getAllMatches();
-			}
-			
-			
-			for (int index = 0; index < userGames.size(); index ++) {
-				
-				Game currentGame = userGames.get(index);
-				
-				User userOne = db.getUserById(currentGame.getUserId1());
-				
-				if (userOne != null) { 
-					
-					UserDto userOneDto = new UserDto(userOne.getId(), userOne.getName());
-					
-					boolean isUserInTheList = false;
-					
-					for (int usersIndex = 0; usersIndex < users.size(); usersIndex ++) {
-						
-						UserDto userDto = users.get(usersIndex);
-						
-						if (userOneDto.getUserId() == userDto.getUserId()) {
-							
-							isUserInTheList = true;		
-						}
-					}
-					
-					if (isUserInTheList != true) {
-						
-						users.add(userOneDto);
-					}
-				}
-				
-				User userTwo = db.getUserById(currentGame.getUserId2());
-				
-				if (userTwo != null) { 
-					
-					UserDto userTwoDto = new UserDto(userTwo.getId(), userTwo.getName());
-					
-					boolean isUserInTheList = false;
-					
-					for (int usersIndex = 0; usersIndex < users.size(); usersIndex ++) {
-						
-						UserDto userDto = users.get(usersIndex);
-						
-						if (userTwoDto.getUserId() == userDto.getUserId()) {
-							
-							isUserInTheList = true;		
-						}
-					}
-					
-					if (isUserInTheList != true) {
-						
-						users.add(userTwoDto);
-					}
-				}
-				
-				Place filteredPlace = db.getPlace(currentGame.getPlaceId());
-				if (filteredPlace != null) { 
-						
-					PlaceDto filteredPlaceDto = new PlaceDto(
-								filteredPlace.getId(), 
-								filteredPlace.getName()
-							);
-					
-					if((containsPlace(placeDtos, filteredPlaceDto)) == false) {
-						
-						placeDtos.add(filteredPlaceDto);
-					}
-					
-				}
-			
+			List <Game> userGames = db.getAllMatches();
 
-			// TODO Calculate <users> and <placeDtos> from all games
+			if (userGames != null) {
+
+				if(filterPlaceId != 0) {
+					
+					userGames = db.getAllMatchesByPlaceId(filterPlaceId);
+					
+				} else if (filterNameId != 0) {
+					
+					userGames = db.getAllMatchesByNameId(filterNameId);
+				} 
 				
+				for (int index = 0; index < userGames.size(); index++) {
+					
+					Game currentGame = userGames.get(index);
+					
+					User firstUser = db.getUserById(currentGame.getUserId1());
+					addUserToList(firstUser, users);	
+					
+					User secondUser = db.getUserById(currentGame.getUserId2());
+					addUserToList(secondUser,users);
+					
+					Place filteredPlace = db.getPlace(currentGame.getPlaceId());
+					addPlaceToList(filteredPlace, placeDtos);
+					
+					matchDto = new MatchDto(
+							firstUser.getName(),
+							currentGame.getUser1Points(),
+							secondUser.getName(),
+							currentGame.getUser2Points(),
+							filteredPlace.getName(),
+							filteredPlace.getAddress(),
+							filteredPlace.getPrice(),
+							0,
+							currentGame.getDate());
+					
+					matches.add(matchDto);
+
+				}	
 				
-			matchDto = new MatchDto(
-					userOne.getName(),
-					currentGame.getUser1Points(),
-					userTwo.getName(),
-					currentGame.getUser2Points(),
-					filteredPlace.getName(),
-					filteredPlace.getAddress(),
-					filteredPlace.getPrice(),
-					0,
-					currentGame.getDate()	
-					);
-				
-			matches.add(matchDto);
-			}	
+				gameDto = new GameDto(userId, matches, users, placeDtos);
+			}
+
 		}
-			
-			gameDto = new GameDto(filterNameId, matches, users, placeDtos); // TODO Use userId for instantiation
+
 		
 		return gameDto;
 	}
-	
-	private boolean containsPlace(List<PlaceDto> placeDtos, PlaceDto place) {
-		
-		boolean placeExists = false;
-		
-		for(int containIndex = 0; containIndex < placeDtos.size(); containIndex++) {
-			
-			PlaceDto currentPlaceDto = placeDtos.get(containIndex);
-			
-			if(place.getPlaceId() == currentPlaceDto.getPlaceId()) {
-				
-				placeExists = true;
-				
-				break;
-			}
-		}
-		
-		return placeExists;
-	}
+
 
 	public AdminDto registerPlace(int userId, String newPlaceName, int newPlacePrice, String newPlaceAddress) {
 		
@@ -261,7 +186,7 @@ public class AppService {
 		
 		User user = db.getUserById(userId);
 		
-		if(user != null && user.getRole().equals("admin")) {
+		if(user != null && user.getRole().equals("admin") && user.isLoggedIn()) {
 			
 			Place newPlace = new Place();
 			
@@ -315,7 +240,7 @@ public class AppService {
 		
 		User user = db.getUserById(userId);
 		
-		if (user != null && user.getRole().equals("admin")) {
+		if (user != null && user.getRole().equals("admin") && user.isLoggedIn()) {
 			
 			if(userRole.equals("admin") || userRole.equals("user")) {
 				
@@ -391,6 +316,25 @@ public class AppService {
 				users.add(newUser);
 			}
 		
+		}
+	}
+
+	private void addPlaceToList(Place filteredPlace, List<PlaceDto> placeDtos) {
+		
+		if(filteredPlace != null) {
+			boolean placeExist = false;
+			for(int containIndex = 0; containIndex < placeDtos.size(); containIndex++) {
+				PlaceDto placeDto = placeDtos.get(containIndex);
+				if(filteredPlace.getId() == placeDto.getPlaceId()) {
+					placeExist = true;
+					break;
+				}
+			}
+			
+			if(placeExist == false) {
+				PlaceDto newPlace = new PlaceDto(filteredPlace.getId(), filteredPlace.getName());
+				placeDtos.add(newPlace);
+			}
 		}
 	}
 
