@@ -315,7 +315,7 @@ public class AppService {
 		
 		if (user != null && user.getRole().equals("admin")) {
 			
-			if(!user.getName().equals(userName) && user.getRole().equals(userRole)) {
+			if(userRole.equals("admin") || userRole.equals("user")) {
 				
 				Random random = new Random();
 				
