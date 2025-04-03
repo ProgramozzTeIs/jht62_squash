@@ -259,7 +259,7 @@ public class AppService {
 		
 		User user = db.getUserById(userId);
 		
-		if(user != null && user.getRole().equals("admin")) {
+		if(user != null && user.getRole().equals("admin") && user.isLoggedIn()) {
 			
 			Place newPlace = new Place();
 			
