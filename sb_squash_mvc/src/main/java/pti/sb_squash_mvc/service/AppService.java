@@ -124,16 +124,20 @@ public class AppService {
 		
 		if (user != null && user.isLoggedIn() == true) {
 			
-			//if(filterPlaceId != 0) {
-				
-				//userGames = db.getAllMatchesByPlaceId(filterPlaceId);
-				
-			//} else {
-				
-			//	userGames = db.getAllMatchesByNameId(filterNameId);
-			//}
+			List<Game> userGames = new ArrayList<>();
 			
-			List <Game> userGames = db.getAllMatches();
+			if(filterPlaceId != 0) {
+				
+				userGames = db.getAllMatchesByPlaceId(filterPlaceId);
+				
+			} else if (filterNameId != 0) {
+				
+				userGames = db.getAllMatchesByNameId(filterNameId);
+			} else {
+				
+				userGames = db.getAllMatches();
+			}
+			
 			
 			for (int index = 0; index < userGames.size(); index ++) {
 				
@@ -188,10 +192,18 @@ public class AppService {
 				}
 				
 				Place filteredPlace = db.getPlace(currentGame.getPlaceId());
-				if (filteredPlace != null) { // TODO Create own contains() method, placeDtos contains the current place?
+				if (filteredPlace != null) { 
 						
-					PlaceDto filteredPlaceDto = new PlaceDto(filteredPlace.getId(), filteredPlace.getName());
-					placeDtos.add(filteredPlaceDto);
+					PlaceDto filteredPlaceDto = new PlaceDto(
+								filteredPlace.getId(), 
+								filteredPlace.getName()
+							);
+					
+					if((containsPlace(placeDtos, filteredPlaceDto)) == false) {
+						
+						placeDtos.add(filteredPlaceDto);
+					}
+					
 				}
 			
 
@@ -217,6 +229,25 @@ public class AppService {
 			gameDto = new GameDto(filterNameId, matches, users, placeDtos); // TODO Use userId for instantiation
 		
 		return gameDto;
+	}
+	
+	private boolean containsPlace(List<PlaceDto> placeDtos, PlaceDto place) {
+		
+		boolean placeExists = false;
+		
+		for(int containIndex = 0; containIndex < placeDtos.size(); containIndex++) {
+			
+			PlaceDto currentPlaceDto = placeDtos.get(containIndex);
+			
+			if(place.getPlaceId() == currentPlaceDto.getPlaceId()) {
+				
+				placeExists = true;
+				
+				break;
+			}
+		}
+		
+		return placeExists;
 	}
 
 	public AdminDto registerPlace(int userId, String newPlaceName, int newPlacePrice, String newPlaceAddress) {
