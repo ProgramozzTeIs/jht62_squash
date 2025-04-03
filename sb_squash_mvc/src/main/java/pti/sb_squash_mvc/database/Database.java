@@ -200,8 +200,15 @@ public class Database {
 	}
 
 	public void saveNewPlace(Place newPlace) {
-		// TODO Auto-generated method stub
 		
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		
+		session.persist(newPlace);
+		
+		
+		tx.commit();
+		session.close();
 	}
 	
 	
