@@ -198,6 +198,11 @@ public class Database {
 		
 		return places;
 	}
+
+	public void saveNewPlace(Place newPlace) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 

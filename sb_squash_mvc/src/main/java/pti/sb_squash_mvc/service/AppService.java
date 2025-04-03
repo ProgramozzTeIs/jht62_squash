@@ -220,8 +220,57 @@ public class AppService {
 	}
 
 	public AdminDto registerPlace(int userId, String newPlaceName, int newPlacePrice, String newPlaceAddress) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		AdminDto adminDto = null;
+		
+		List<UserDto> userDtos = new ArrayList<>();
+		List<PlaceDto> placeDtos = new ArrayList<>();
+		
+		User user = db.getUserById(userId);
+		
+		if(user != null && user.getRole().equals("admin")) {
+			
+			Place newPlace = new Place();
+			
+			newPlace.setName(newPlaceName);
+			newPlace.setPrice(newPlacePrice);
+			newPlace.setAddress(newPlaceAddress);
+			
+			db.saveNewPlace(newPlace);
+			
+			List<User> allUsers = db.getAllUsers();
+			List<Place> allPlaces = db.getAllPlaces();
+			
+			for(int usersIndex = 0; usersIndex < allUsers.size(); usersIndex++) {
+				
+				User currentUser = allUsers.get(usersIndex);
+				UserDto userDto = new UserDto(
+							currentUser.getId(),
+							currentUser.getName()
+						);
+				userDtos.add(userDto);
+			}
+			for(int placesIndex = 0; placesIndex < allPlaces.size(); placesIndex++) {
+				
+				Place currentPlace = allPlaces.get(placesIndex);
+				PlaceDto placeDto = new PlaceDto(
+							currentPlace.getId(),
+							currentPlace.getName(),
+							currentPlace.getAddress(),
+							currentPlace.getPrice()
+						
+						);
+				
+				placeDtos.add(placeDto);
+			}
+			adminDto = new AdminDto(
+						userId, 
+						userDtos, 
+						placeDtos
+					);
+		}
+		
+		return adminDto;
 	}
 	
 	public AdminDto registerUser(int userId, String userName, String userRole) {
