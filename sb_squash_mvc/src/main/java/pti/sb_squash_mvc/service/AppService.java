@@ -114,67 +114,90 @@ public class AppService {
 	}
 
 	public GameDto getAllGamesByIds(int userId, int filterNameId, int filterPlaceId) {
-		
-		GameDto gameDto = null;
-		MatchDto matchDto = null;
-		
-		List <MatchDto> matches = new ArrayList<>();
-		List <UserDto> users = new ArrayList<>();
-		List <PlaceDto> placeDtos = new ArrayList<>();
-		
-		User user = db.getUserById(userId);
-		
-		if (user != null && user.isLoggedIn() == true) {
-			
-			List <Game> userGames = db.getAllMatches();
+	    
+	    GameDto gameDto = null;
+	    MatchDto matchDto = null;
+	    
+	    List<MatchDto> matches = new ArrayList<>();
+	    List<UserDto> users = new ArrayList<>();
+	    List<PlaceDto> placeDtos = new ArrayList<>();
+	    
+	    User user = db.getUserById(userId);
+	    
+	    if (user != null && user.isLoggedIn()) {
+	        
+	        
+	        List<User> allUsers = db.getAllUsers();
+	        
+	        for (int userIndex = 0; userIndex < allUsers.size(); userIndex++) {
+	            User currentUser = allUsers.get(userIndex);
+	            
+	            addUserToList(currentUser, users);
+	        }
 
-			if (userGames != null) {
+	        
+	        List<Place> allPlaces = db.getAllPlaces();
+	        
+	        for (int placeIndex = 0; placeIndex < allPlaces.size(); placeIndex++) {
+	            Place currentPlace = allPlaces.get(placeIndex);
+	            
+	            addPlaceToList(currentPlace, placeDtos);
+	        }
 
-				if(filterPlaceId != 0) {
-					
-					userGames = db.getAllMatchesByPlaceId(filterPlaceId);
-					
-				} else if (filterNameId != 0) {
-					
-					userGames = db.getAllMatchesByNameId(filterNameId);
-				} 
-				
-				for (int index = 0; index < userGames.size(); index++) {
-					
-					Game currentGame = userGames.get(index);
-					
-					User firstUser = db.getUserById(currentGame.getUserId1());
-					addUserToList(firstUser, users);	
-					
-					User secondUser = db.getUserById(currentGame.getUserId2());
-					addUserToList(secondUser,users);
-					
-					Place filteredPlace = db.getPlace(currentGame.getPlaceId());
-					addPlaceToList(filteredPlace, placeDtos);
-					
-					matchDto = new MatchDto(
-							firstUser.getName(),
-							currentGame.getUser1Points(),
-							secondUser.getName(),
-							currentGame.getUser2Points(),
-							filteredPlace.getName(),
-							filteredPlace.getAddress(),
-							filteredPlace.getPrice(),
-							0,
-							currentGame.getDate());
-					
-					matches.add(matchDto);
+	        
+	        List<Game> userGames = db.getAllMatches();
+	        
+	        if (filterPlaceId != 0) {
+	            userGames = db.getAllMatchesByPlaceId(filterPlaceId);
+	        
+	        } else if (filterNameId != 0) {
+	            userGames = db.getAllMatchesByNameId(filterNameId);
+	        }
 
-				}	
-				
-				gameDto = new GameDto(userId, matches, users, placeDtos);
-			}
+	       
+	        for (int gameIndex = 0; gameIndex < userGames.size(); gameIndex++) {
+	            Game currentGame = userGames.get(gameIndex);
+	            
+	            
+	            User firstUser = db.getUserById(currentGame.getUserId1());
+	            addUserToList(firstUser, users);
 
-		}
+	            
+	            User secondUser = db.getUserById(currentGame.getUserId2());
+	            addUserToList(secondUser, users);
 
-		
-		return gameDto;
+	            
+	            Place filteredPlace = db.getPlace(currentGame.getPlaceId());
+	            addPlaceToList(filteredPlace, placeDtos);
+
+	            
+	            matchDto = new MatchDto(
+	                firstUser.getName(),
+	                currentGame.getUser1Points(),
+	                secondUser.getName(),
+	                currentGame.getUser2Points(),
+	                filteredPlace.getName(),
+	                filteredPlace.getAddress(),
+	                filteredPlace.getPrice(),
+	                0,
+	                currentGame.getDate()
+	            );
+
+	            matches.add(matchDto);
+	        }    
+
+	        
+	        gameDto = new GameDto(
+		        		userId, 
+		        		matches, 
+		        		users, 
+		        		placeDtos
+	        		);
+	    }
+
+	    return gameDto;
 	}
+
 
 
 	public AdminDto registerPlace(int userId, String newPlaceName, int newPlacePrice, String newPlaceAddress) {
