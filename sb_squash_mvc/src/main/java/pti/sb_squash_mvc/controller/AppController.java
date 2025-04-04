@@ -54,7 +54,8 @@ public class AppController {
 		}
 		else if (lud.getRole().equals("admin")) {
 			
-			// TODO Get AdminDto
+			AdminDto adminDto = service.getAdminData(lud.getUserId());
+			model.addAttribute("adminDto", adminDto);
 			targetPage = "admin.html";
 		}
 		else {

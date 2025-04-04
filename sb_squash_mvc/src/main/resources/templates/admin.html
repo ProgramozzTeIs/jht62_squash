@@ -11,11 +11,27 @@
 	<form action="/admin/reg/user" method="post">
 		<input type="hidden" name="uid" th:value="${adminDto.getUserId()}"/>
 		<input type="text" name="uname" placeholder="Username"/>
-		<input type="text" name="urole" placeholder="User Role"/>
-		<input type="submit"/>
+		
+		<select name="urole"/>
+			<option value="user"> User </option>
+			<option value="admin"> Admin </option>
+		</select>
+		
+		<input type="submit" value="Register User"/>
+			
 	</form>
+	
+	<p>Register a New Place</p>
+	
+		<form action="/admin/reg/place" method="post">
+        <input type="hidden" name="uid" th:value="${adminDto.getUserId()}"/>
+        
+        <input type="text" name="name" placeholder="Place Name"/>
+        <input type="number" name="price" placeholder="Price"/>
+        <input type="text" name="address" placeholder="Address"/>
 
-
+        <input type="submit" value="Register Place"/>
+    </form>
 
 
 </body>

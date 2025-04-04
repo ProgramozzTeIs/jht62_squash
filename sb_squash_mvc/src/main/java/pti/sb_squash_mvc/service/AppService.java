@@ -361,4 +361,48 @@ public class AppService {
 		}
 	}
 
+	public AdminDto getAdminData(int adminId) {
+	    
+		AdminDto adminDto = null;
+	    User adminUser = db.getUserById(adminId);
+
+	    if (adminUser != null && adminUser.getRole().equals("admin")) {
+	        
+	        List<UserDto> userDtos = new ArrayList<>();
+	        
+	        List<User> allUsers = db.getAllUsers();
+	       
+	        for (int userIndex = 0; userIndex < allUsers.size(); userIndex++) {
+	            
+	        	User currentUser = allUsers.get(userIndex);
+	   
+	            UserDto userDto = new UserDto(
+		            		currentUser.getId(), 
+		            		currentUser.getName()
+	            		);
+	            userDtos.add(userDto);
+	        }
+
+	        List<PlaceDto> placeDtos = new ArrayList<>();
+	        
+	        List<Place> allPlaces = db.getAllPlaces();
+	        for (int placeIndex = 0; placeIndex < allPlaces.size(); placeIndex++) {
+	            Place currentPlace = allPlaces.get(placeIndex);
+	    
+	            PlaceDto placeDto = new PlaceDto(
+		            		currentPlace.getId(), 
+		            		currentPlace.getName(), 
+		            		currentPlace.getAddress(), 
+		            		currentPlace.getPrice()
+	            		);
+	            placeDtos.add(placeDto);
+	        }
+
+	        adminDto = new AdminDto(adminId, userDtos, placeDtos);
+	    }
+
+	    return adminDto;
+
+	}
+
 }
