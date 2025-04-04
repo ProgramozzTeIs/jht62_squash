@@ -145,13 +145,16 @@ public class AppService {
 	        }
 
 	        
-	        List<Game> userGames = db.getAllMatches();
+	        List<Game> userGames = null;
 	        
 	        if (filterPlaceId != 0) {
 	            userGames = db.getAllMatchesByPlaceId(filterPlaceId);
 	        
 	        } else if (filterNameId != 0) {
 	            userGames = db.getAllMatchesByNameId(filterNameId);
+	        } else {
+	        	
+	        	userGames = db.getAllMatches();
 	        }
 
 	       
@@ -160,15 +163,11 @@ public class AppService {
 	            
 	            
 	            User firstUser = db.getUserById(currentGame.getUserId1());
-	            addUserToList(firstUser, users);
 
-	            
 	            User secondUser = db.getUserById(currentGame.getUserId2());
-	            addUserToList(secondUser, users);
 
-	            
 	            Place filteredPlace = db.getPlace(currentGame.getPlaceId());
-	            addPlaceToList(filteredPlace, placeDtos);
+	            
 
 	            
 	            matchDto = new MatchDto(
