@@ -1,11 +1,15 @@
 package pti.sb_squash_mvc.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import pti.sb_squash_mvc.database.Database;
 import pti.sb_squash_mvc.dto.AdminDto;
@@ -90,6 +94,7 @@ public class AppService {
 							placeDtos.add(placeDto);
 						}
 					}
+					double eurAmount =getEurAmount(currentGame.getDate(),currentPlace.getPrice());
 					
 					matchDto = new MatchDto(
 							firstUser.getName(),
@@ -99,11 +104,13 @@ public class AppService {
 							currentPlace.getName(),
 							currentPlace.getAddress(),
 							currentPlace.getPrice(),
-							0,
+							eurAmount,
 							currentGame.getDate());
 					matches.add(matchDto);
 					
 				}
+				
+				
 				
 				gameDto = new GameDto(userId, matches, users, placeDtos); 
 				gameDto.sort(); 
@@ -111,6 +118,26 @@ public class AppService {
 		}
 
 		return gameDto;
+	}
+	
+	private double getEurAmount(LocalDateTime date, int price) {
+		
+		double eurAmount = 0;
+		
+		String amount = String.valueOf(price);
+		DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyMMdd");
+		String formattedDate = date.format(formatter);
+		
+		RestTemplate rt = new RestTemplate();
+		String eur =rt.getForObject("http://localhost:8081/convert?amount=" + amount + "&date=" + formattedDate, String.class);
+		
+		JSONObject jsonObject = new JSONObject(eur);
+		double convertedAmount = jsonObject.getDouble("convertedAmount");
+		
+		eurAmount = Math.round(convertedAmount * 100) / 100.0;
+		
+		
+		return eurAmount;
 	}
 
 	public GameDto getAllGamesByIds(int userId, int filterNameId, int filterPlaceId) {
@@ -365,7 +392,7 @@ public class AppService {
 		AdminDto adminDto = null;
 	    User adminUser = db.getUserById(adminId);
 
-	    if (adminUser != null && adminUser.getRole().equals("admin")) {
+	    if (adminUser != null && adminUser.getRole().equals("admin") && adminUser.isLoggedIn()) {
 	        
 	        List<UserDto> userDtos = new ArrayList<>();
 	        
