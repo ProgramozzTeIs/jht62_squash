@@ -366,7 +366,7 @@ public class AppService {
 		AdminDto adminDto = null;
 	    User adminUser = db.getUserById(adminId);
 
-	    if (adminUser != null && adminUser.getRole().equals("admin")) {
+	    if (adminUser != null && adminUser.getRole().equals("admin") && adminUser.isLoggedIn()) {
 	        
 	        List<UserDto> userDtos = new ArrayList<>();
 	        
