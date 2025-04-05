@@ -290,14 +290,8 @@ public class AppService {
 		User user = db.getUserById(userId);
 		
 		if (user != null && user.getRole().equals("admin") && user.isLoggedIn()) {
-			
-			if(userRole.equals("admin") || userRole.equals("user")) {
 				
-				Random random = new Random();
-				
-				int password = 1000 + random.nextInt(9000);
-				
-				String generatedPassword = String.valueOf(password);
+				String generatedPassword = passwordGenerator();
 				
 				User registerPlayer = new User();
 				
@@ -308,7 +302,6 @@ public class AppService {
 				registerPlayer.setLoggedIn(false);
 				
 				db.saveNewUser(registerPlayer);
-			}
 
 			List <User> allUsers = db.getAllUsers();
 			List <Place> allPlaces = db.getAllPlaces();
@@ -344,6 +337,29 @@ public class AppService {
 		}
 
 		return adminDto;
+	}
+
+	private String passwordGenerator() {
+		Random random = new Random();
+		
+		int passwordLength = 4;
+		
+		String capLetter = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; 
+		String letter = "abcdefghijklmnopqrstuvwxyz";
+		
+		String finalString = capLetter + letter;
+		
+		char[] password = new char[passwordLength];
+		
+		for (int index = 0; index < passwordLength; index++) {
+			
+			password[index] =  finalString.charAt(random.nextInt(finalString.length()));
+			
+		}
+		
+		String generatedPassword = String.valueOf(password);
+		
+		return generatedPassword;
 	}
 	
 	private void addUserToList(User user, List<UserDto> users) {
